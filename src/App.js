@@ -13,7 +13,7 @@ class App extends Component {
     };
 }
 componentDidMount(){
-  fetch('http://erp.technestudioit.com/api/ordersapi/')
+  fetch('https://erp.technestudioit.com/api/ordersapi/')
   .then(response => response.json())
   .then(orders => this.setState({orders: orders}));
 }
