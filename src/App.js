@@ -1,26 +1,38 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
 import './App.css';
+import { ClientList } from './components/client-list/client-list.component'
+import { SearchBox } from './components/searchfield/search.component'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  constructor(){
+    super();
+
+    this.state = {
+      orders : [],
+      searchField: ''
+    };
+}
+componentDidMount(){
+  fetch('http://erp.technestudioit.com/api/ordersapi/')
+  .then(response => response.json())
+  .then(orders => this.setState({orders: orders}));
+}
+  render(){
+    const { orders, searchField } = this.state;
+    const filteredOrders = orders.filter(order => 
+      order.client_name.toLowerCase().includes(searchField.toLowerCase()) );
+    return (
+      <div className="App">
+        <h1>Clientes</h1>
+        <SearchBox
+          placeholder = 'Buscar Cliente'
+          handleChange = {e => this.setState({searchField : e.target.value})}
+        />
+        <ClientList orders={filteredOrders}>
+        </ClientList>
+      </div>
+    );
+}
 }
 
 export default App;
